@@ -83,7 +83,7 @@ function power_of_2(n) {
 // VexFlow library setup
 // ----------------------------------------------------------------------------------
 
-VF = Vex.Flow;
+const VF = Vex.Flow;
 
 var vexDiv = document.getElementById("vex")
 var renderer = new VF.Renderer(vexDiv, VF.Renderer.Backends.SVG);
@@ -110,11 +110,11 @@ function create_new_tie(firstNote, lastNote) {
 }
 
 function create_new_stave() {
-  var stave = new VF.Stave(staveX, staveY, staveWidth);
+  var new_stave = new VF.Stave(staveX, staveY, staveWidth);
 
   /* If this stave is the first stave of a row. */
   if (staves.length % stavesPerRow === 0) {
-    stave.addClef("treble").addTimeSignature("4/4").addKeySignature(currentKeySignature);
+    new_stave.addClef("treble").addTimeSignature("4/4").addKeySignature(currentKeySignature);
   }
 
   /* If the stave is the last stave of a row. */
@@ -125,7 +125,7 @@ function create_new_stave() {
     staveX += staveWidth;
   }
 
-  staves.push(stave);
+  staves.push(new_stave);
 }
 
 /* Returns a list of note durations, which might be seperated by strings of "new".
@@ -141,7 +141,7 @@ function list_new_notes(duration, durationLeft) {
 
   while (duration > 0) {
     while (durationLeft > 0) {
-      for (i = 0; i < DURATIONS_IN_QLS.length; i++) {
+      for (let i = 0; i < DURATIONS_IN_QLS.length; i++) {
         if (DURATIONS_IN_QLS[i] <= durationLeft) {
           newNotes.push(DURATIONS[i]);
 
@@ -187,7 +187,7 @@ function draw_notes() {
   renderer.resize(stavesPerRow * 500, 2000);
   context = renderer.getContext();
 
-  for (i = 0; i < staves.length; i++) {
+  for (let i = 0; i < staves.length; i++) {
     if (notes[i].length == 0) {
       continue;
     }
@@ -325,7 +325,7 @@ function handle_accidental(midiValue) {
     }
   }
 
-  return false;
+  return "";
 }
 
 function fix_accidental(note, accidental) {
@@ -467,7 +467,7 @@ function getMIDIMessage(message) {
       var accidental = "";
       var foundAccidental = handle_accidental(note);
 
-      if (foundAccidental) {
+      if (foundAccidental != "") {
         var fixResult = fix_accidental(note, foundAccidental);
 
         note = fixResult[0];
@@ -486,7 +486,6 @@ function getMIDIMessage(message) {
           /* A dot is needed. */
           } else {
             newNote = String(DURATIONS[DURATIONS.indexOf(parseFloat(newNote)) + 1]);
-
             notes[notes.length - 1].push(new VF.StaveNote({ keys: [String(number_to_note(note) + "/" + number_to_octave(note))], duration: String(newNote) }).addDot(0));
           }
 
