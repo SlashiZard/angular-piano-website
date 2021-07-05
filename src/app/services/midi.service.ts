@@ -24,7 +24,8 @@ export class MIDIService {
   public staveX = 10 + this.staveWidth;
   public staveY = 40;
 
-  public baseWidth = document.querySelector<HTMLElement>(".base")!.offsetWidth;
+  // public baseWidth = document.querySelector<HTMLElement>(".base")!.offsetWidth;
+  public baseWidth = 0;
   public stavesPerRow = Math.floor(this.baseWidth / this.staveWidth);
 
   // ----------------------------------------------------------------------------------
@@ -75,4 +76,8 @@ export class MIDIService {
   public currentScale = this.sharpScales[0];
 
   constructor() { }
+
+  public setBaseWidth(width: number) {
+    this.baseWidth = width;
+  }
 }
