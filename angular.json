@@ -33,7 +33,11 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.css"
             ],
-            "scripts": []
+            "scripts": [
+              "./node_modules/jquery/dist/jquery.min.js",
+              "./src/assets/js/WEBMIDIAPI.min.js",
+              "./node_modules/vexflow/releases/vexflow-min.js"
+            ]
           },
           "configurations": {
             "production": {

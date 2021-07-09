@@ -17,5 +17,6 @@ export class NoteDisplayComponent implements OnInit {
     this.width = document.querySelector<HTMLElement>(".base")!.offsetWidth;
     this.changeDetectorRef.detectChanges();
     this.midiService.setBaseWidth(this.width);
+    this.midiService.setupStaves();
   }
 }

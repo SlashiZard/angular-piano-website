@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import * as vexflow from "vexflow";
+
 @Injectable({
   providedIn: 'root'
 })
@@ -33,9 +35,9 @@ export class MIDIService {
   // ----------------------------------------------------------------------------------
 
   /* Store staves, played notes and ties here. */
-  public staves = [];
-  public notes = [[]];
-  public ties = [];
+  public staves: any = [];
+  public notes: any = [[]];
+  public ties: any = [];
 
   /* Keep track of pressed notes and their values. Initialize the 128 midi values with 0. */
   public velocities = Array(128).fill(0);
@@ -75,7 +77,35 @@ export class MIDIService {
   public currentKeySignature = this.sharpScalesNames[0];
   public currentScale = this.sharpScales[0];
 
+  // ----------------------------------------------------------------------------------
+  // Math Functions
+  // ----------------------------------------------------------------------------------
+
+  /* Returns True if n is (a whole number and) a power of two. */
+  private power_of_2(n: number) {
+    return (n - Math.floor(n) === 0) && (n && (n & (n - 1)) === 0);
+  }
+
   constructor() { }
+
+  public setupStaves() {
+    let VF = Vex.Flow;
+    let vexDiv = document.getElementById("vex") as HTMLInputElement;
+    // console.log(Vex);
+    // console.log(VF);
+    // console.log(vexDiv);
+    
+    let renderer = new VF.Renderer(vexDiv, VF.Renderer.Backends.SVG);
+    renderer.resize(this.stavesPerRow * 500, 2000);
+    let context = renderer.getContext();
+
+    /* Create the first stave and draw it. */
+    let stave = new VF.Stave(10, 40, this.staveWidth);
+    stave.addClef("treble").addTimeSignature("4/4");
+    stave.addKeySignature(this.currentKeySignature);
+    this.staves.push(stave);
+    stave.setContext(context).draw();
+  }
 
   public setBaseWidth(width: number) {
     this.baseWidth = width;
