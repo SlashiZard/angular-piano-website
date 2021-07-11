@@ -114,6 +114,10 @@ export class MidiConversionService {
 
     return [note, accidental];
   }
+
+  public getKeysOfNote(note: number) {
+    return String(this.number_to_note(note) + "/" + this.number_to_octave(note));
+  }
   
   constructor(private globalsService: GlobalsService) { }
 }

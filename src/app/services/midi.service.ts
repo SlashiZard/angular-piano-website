@@ -142,11 +142,11 @@ export class MIDIService {
 
             /* Note is of full duration. */
             if (this.mathService.power_of_2(newNote)) {
-              this.globalsService.notes[this.globalsService.notes.length - 1].push(new Vex.Flow.StaveNote({ keys: [String(this.midiConversionService.number_to_note(note) + "/" + this.midiConversionService.number_to_octave(note))], duration: String(newNote) }));
+              this.globalsService.notes[this.globalsService.notes.length - 1].push(new Vex.Flow.StaveNote({ keys: [this.midiConversionService.getKeysOfNote(note)], duration: String(newNote) }));
             /* A dot is needed. */
             } else {
               newNote = String(this.globalsService.DURATIONS[this.globalsService.DURATIONS.indexOf(newNote) + 1]);
-              this.globalsService.notes[this.globalsService.notes.length - 1].push(new Vex.Flow.StaveNote({ keys: [String(this.midiConversionService.number_to_note(note) + "/" + this.midiConversionService.number_to_octave(note))], duration: String(newNote) }).addDot(0));
+              this.globalsService.notes[this.globalsService.notes.length - 1].push(new Vex.Flow.StaveNote({ keys: [this.midiConversionService.getKeysOfNote(note)], duration: String(newNote) }).addDot(0));
             }
 
             /* Add the accidentals. */
