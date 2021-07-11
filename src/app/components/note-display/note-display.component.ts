@@ -11,12 +11,19 @@ export class NoteDisplayComponent implements OnInit {
 
   constructor(private midiService: MIDIService, private changeDetectorRef: ChangeDetectorRef) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+    // this.width = document.querySelector<HTMLElement>(".base")!.offsetWidth;
+    // this.changeDetectorRef.detectChanges();
+    // this.midiService.connect();
+    // this.midiService.setBaseWidth(this.width);
+    // this.midiService.setupStaves();
+  }
 
   ngAfterViewInit(): void {
     this.width = document.querySelector<HTMLElement>(".base")!.offsetWidth;
     this.changeDetectorRef.detectChanges();
+    this.midiService.connect();
     this.midiService.setBaseWidth(this.width);
     this.midiService.setupStaves();
-  }
+   }
 }

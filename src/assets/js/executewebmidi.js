@@ -368,13 +368,6 @@ function fix_accidental(note, accidental) {
 navigator.requestMIDIAccess()
   .then(onMIDISuccess, onMIDIFailure);
 
-function connect() {
-  navigator.requestMIDIAccess()
-    .then(
-      (midi) => midiReady(midi),
-      (err) => console.log('Something went wrong', err));
-}
-
 function midiReady(midi) {
   /* Also react to device changes. */
   midi.addEventListener('statechange', (event) => initDevices(event.target));
@@ -510,5 +503,3 @@ function getMIDIMessage(message) {
       break;
   }
 }
-
-

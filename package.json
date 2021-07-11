@@ -24,11 +24,13 @@
     "ajv-keywords": "^3.5.2",
     "bootstrap": "^4.6.0",
     "jquery": "^3.6.0",
+    "jzz": "^1.3.6",
     "ng-bootstrap": "^1.6.3",
     "popper.js": "^1.16.1",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
     "vexflow": "^3.0.9",
+    "webmidi": "^2.5.2",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {
@@ -38,6 +40,7 @@
     "@types/jasmine": "~3.6.0",
     "@types/node": "^12.20.16",
     "@types/vexflow": "^3.0.1",
+    "@types/webmidi": "^2.0.6",
     "jasmine-core": "~3.7.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",

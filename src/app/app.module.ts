@@ -7,11 +7,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { MIDIService } from './services/midi.service';
 import { NoteDisplayComponent } from './components/note-display/note-display.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { FooterComponent } from './components/footer/footer.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NoteDisplayComponent
+    NoteDisplayComponent,
+    NavbarComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,

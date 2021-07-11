@@ -3,7 +3,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "./out-tsc/app",
-    "types": ["node", "vexflow"]
+    "types": ["node", "vexflow", "webmidi"]
   },
   "files": [
     "src/main.ts",

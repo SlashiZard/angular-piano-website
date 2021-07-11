@@ -20,7 +20,7 @@
       "es2018",
       "dom"
     ],
-    "types": ["node", "vexflow"],
+    "types": ["node", "vexflow", "webmidi"],
     "allowJs": true
   },
   "angularCompilerOptions": {
