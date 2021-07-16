@@ -77,6 +77,17 @@ export class GlobalsService {
 
   public renderer: Vex.Flow.Renderer | any;
 
+  public reset() {
+    this.scoreDuration = 0;
+    this.measureDuration = 0;
+    this.staves = [];
+    this.notes = [[]];
+    this.ties = [];
+    this.velocities = Array(128).fill(0);
+    this.noteTimestamps = Array(128).fill(0);
+    this.currentlyPressing = 0;
+  }
+
   constructor() { }
 
   public setVelocity(index: number, value: number) {
