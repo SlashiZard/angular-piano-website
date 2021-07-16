@@ -1,2 +1,4 @@
 <div id="vex"></div>
-<p>{{ this.width }}</p>
+<div *ngFor="let entry of midiAccessEntries">
+    <p>{{ entry[1].name }}</p>
+</div>

@@ -17,69 +17,36 @@ export class MIDIService {
   // ----------------------------------------------------------------------------------
   // Web Midi API
   // ----------------------------------------------------------------------------------
-  public midiIn : any[] = [];
-  public midiOut : any[] = [];
+  public midiAccessEntries: any[] = [];
+
+  public getMidiAccessEntries() {
+    return this.midiAccessEntries;
+  }
 
   public connect() {
     window.navigator.requestMIDIAccess()
     .then((midiAccess) => {
         console.log("MIDI Ready!");
-        for(let entry of midiAccess.inputs) {
-            console.log("MIDI input device: " + entry[1].id)
-            entry[1].onmidimessage = this.getMIDIMessage.bind(this);
+        this.midiAccessEntries = [];
+
+        for (let entry of midiAccess.inputs) {
+          this.midiAccessEntries.push(entry);
+          console.log(entry);
         }
+
+        if (this.midiAccessEntries.length >= 1) {
+          this.midiAccessEntries[0][1].onmidimessage = this.getMIDIMessage.bind(this);
+        }
+
+        // for (let entry of midiAccess.inputs) {
+        //     console.log("MIDI input device: " + entry[1].id)
+        //     entry[1].onmidimessage = this.getMIDIMessage.bind(this);
+        // }
     })
     .catch((error) => {
         console.log("Error accessing MIDI devices: " + error);
     });
   }
-
-  // public onMidiMessage(midiEvent: WebMidi.MIDIMessageEvent): void {
-  //     let noteNames: string[] = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
-  //     let data: Uint8Array = midiEvent.data;
-  //     if(data.length === 3) {
-  //         // status is the first byte.
-  //         let status = data[0];
-  //         // command is the four most significant bits of the status byte.
-  //         let command = status >>> 4;
-  //         // channel 0-15 is the lower four bits.
-  //         let channel = status & 0xF;
-
-  //         console.log(`$Command: ${command.toString(16)}, Channel: ${channel.toString(16)}`);
-
-  //         // just look at note on and note off messages.
-  //         if(command === 0x9 || command === 0x8) {
-  //             // note number is the second byte.
-  //             let note = data[1];
-  //             // velocity is the thrid byte.
-  //             let velocity = data[2];
-
-  //             let commandName = command === 0x9 ? "Note On " : "Note Off";
-
-  //             // calculate octave and note name.
-  //             let octave = Math.trunc(note / 12);
-  //             let noteName = noteNames[note % 12];
-
-  //             console.log(`${commandName} ${noteName}${octave} ${velocity}`);
-  //         }
-  //     }
-  // }
-
-  // public connect() {
-  //   window.navigator.requestMIDIAccess()
-  //     .then(this.onMIDISuccess, this.onMIDIFailure);
-  // }
-
-  // private onMIDISuccess(midiAccess: any) {
-  //   for (let input of midiAccess.inputs.values()) {
-  //     console.log(input);
-  //     input.onmidimessage = this.getMIDIMessage;
-  //   }
-  // }
-
-  // private onMIDIFailure() {
-  //   console.log('Could not access your MIDI devices.');
-  // }
 
   private getMIDIMessage(message: any) {
     let command = message.data[0];

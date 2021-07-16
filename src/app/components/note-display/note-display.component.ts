@@ -7,17 +7,19 @@ import { MIDIService } from 'src/app/services/midi.service';
   styleUrls: ['./note-display.component.css']
 })
 export class NoteDisplayComponent implements OnInit {
-  public width = 0;
+  public midiAccessEntries: any[] = [];
 
   constructor(private midiService: MIDIService, private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit(): void { }
 
   ngAfterViewInit(): void {
-    this.width = document.querySelector<HTMLElement>(".base")!.offsetWidth;
-    this.changeDetectorRef.detectChanges();
+    let width = document.querySelector<HTMLElement>(".base")!.offsetWidth;
     this.midiService.connect();
-    this.midiService.setBaseWidth(this.width);
+    this.midiAccessEntries = this.midiService.getMidiAccessEntries();
+    this.midiService.setBaseWidth(width);
     this.midiService.setupStaves();
+    this.changeDetectorRef.detectChanges();
+    console.log(this.midiAccessEntries);
    }
 }
