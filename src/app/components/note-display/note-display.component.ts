@@ -11,14 +11,17 @@ import { VexflowService } from 'src/app/services/vexflow.service';
 export class NoteDisplayComponent implements OnInit, OnDestroy {
   midiAccessEntries: any[] = [];
   scaleNames: any[] = [];
-  scaleTypes: string[] = ["sharps", "flats"];
+  scaleTypes: string[];
   selectedScale = 'C';
   selectedScaleType = 'sharps';
 
   constructor(private midiService: MIDIService,
               private globalsService: GlobalsService,
               private vexflowService: VexflowService,
-              private changeDetectorRef: ChangeDetectorRef) { }
+              private changeDetectorRef: ChangeDetectorRef)
+  {
+    this.scaleTypes = this.globalsService.scaleTypes;
+  }
 
   updateScaleNames(): void {
     if (this.globalsService.scaleType == "sharps") {

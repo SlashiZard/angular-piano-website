@@ -32,7 +32,7 @@ import { FormsModule } from '@angular/forms';
     MatRadioModule,
     FormsModule
   ],
-  providers: [MIDIService],
+  providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

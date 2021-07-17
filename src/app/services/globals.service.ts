@@ -46,7 +46,8 @@ export class GlobalsService {
   // Scale Variables
   // ----------------------------------------------------------------------------------
 
-  /* Put in Scale.js */
+  scaleTypes: string[] = ["sharps", "flats"];
+  
   sharpScalesNames = ["C", "G", "D", "A", "E", "B", "F#", "C#"];
   sharpScales = [
     [1, 3, 6, 8, 10],
