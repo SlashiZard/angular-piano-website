@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { GlobalsService } from 'src/app/services/globals.service';
 import { MIDIService } from 'src/app/services/midi.service';
+import { VexflowService } from 'src/app/services/vexflow.service';
 
 @Component({
   selector: 'app-note-display',
@@ -14,6 +15,7 @@ export class NoteDisplayComponent implements OnInit, OnDestroy {
 
   constructor(private midiService: MIDIService,
               private globalsService: GlobalsService,
+              private vexflowService: VexflowService,
               private changeDetectorRef: ChangeDetectorRef) { }
 
   ngOnInit(): void {
@@ -39,10 +41,13 @@ export class NoteDisplayComponent implements OnInit, OnDestroy {
   }
 
   setScale(keySignature: string): void {
-    this.globalsService.reset();
-    console.log("keySignature is " + keySignature);
+    console.log("new keySignature is " + keySignature);
     let scaleType = "sharps";
     let scaleIndex = this.globalsService.sharpScalesNames.indexOf(keySignature);
+
+    this.globalsService.reset();
     this.globalsService.setScale(scaleType, scaleIndex);
+    this.midiService.setupStaves();
+    // this.vexflowService.draw_notes();
   }
 }

@@ -91,7 +91,7 @@ export class VexflowService {
 
   draw_notes() {
     console.log("drawing notes");
-    let vexDiv = document.querySelector("#vex") as HTMLInputElement;
+    let vexDiv = document.getElementById("vex") as HTMLInputElement;
     vexDiv.innerHTML = "";
     this.globalsService.renderer = new Vex.Flow.Renderer(vexDiv, Vex.Flow.Renderer.Backends.SVG);
     this.globalsService.renderer.resize(this.globalsService.stavesPerRow * 500, 2000);

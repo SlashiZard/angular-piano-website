@@ -136,10 +136,10 @@ export class MIDIService {
     }
   }
 
-
   setupStaves() {
     let VF = Vex.Flow;
     let vexDiv = document.getElementById("vex") as HTMLInputElement;
+    vexDiv.innerHTML = "";
     this.globalsService.renderer = new VF.Renderer(vexDiv, VF.Renderer.Backends.SVG);
     this.globalsService.renderer.resize(this.globalsService.stavesPerRow * 500, 2000);
     let context = this.globalsService.renderer.getContext();
@@ -149,6 +149,7 @@ export class MIDIService {
     stave.addClef("treble").addTimeSignature("4/4");
     stave.addKeySignature(this.globalsService.currentKeySignature);
     this.globalsService.staves.push(stave);
+    console.log("all staves: ", this.globalsService.staves);
     stave.setContext(context).draw();
   }
 
