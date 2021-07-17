@@ -10,7 +10,7 @@ export class VexflowService {
   // VexFlow Functions
   // ----------------------------------------------------------------------------------
 
-  public create_new_tie(firstNote: Vex.Flow.StaveNote | undefined, lastNote: Vex.Flow.StaveNote | undefined) {
+  create_new_tie(firstNote: Vex.Flow.StaveNote | undefined, lastNote: Vex.Flow.StaveNote | undefined) {
     return new Vex.Flow.StaveTie({
       first_note: firstNote,
       last_note: lastNote,
@@ -19,7 +19,7 @@ export class VexflowService {
     })
   }
 
-  public create_new_stave() {
+  create_new_stave() {
     let new_stave = new Vex.Flow.Stave(this.globalsService.staveX, this.globalsService.staveY, this.globalsService.staveWidth);
 
     /* If this stave is the first stave of a row. */
@@ -42,7 +42,7 @@ export class VexflowService {
   /* Returns a list of note durations, which might be seperated by strings of "new".
   * Splits a single duration into multiple notes and also indicates where new staves should start.
   */
-  public list_new_notes(duration: number, durationLeft: number) {
+  list_new_notes(duration: number, durationLeft: number) {
     durationLeft = Math.min(durationLeft, duration);
     let newNotes = [];
 
@@ -89,7 +89,7 @@ export class VexflowService {
   }
 
 
-  public draw_notes() {
+  draw_notes() {
     console.log("drawing notes");
     let vexDiv = document.querySelector("#vex") as HTMLInputElement;
     vexDiv.innerHTML = "";
@@ -119,7 +119,7 @@ export class VexflowService {
     this.globalsService.ties.forEach(function (t: Vex.Flow.StaveTie) { t.setContext(context).draw() });
   }
 
-  public handle_ties(noteCount: number) {
+  handle_ties(noteCount: number) {
     /* Notes only need to be tied if the incoming amount of notes is two or more. */
     if (noteCount > 1) {
       let notesInLastArray = this.globalsService.notes[this.globalsService.notes.length - 1].length;
@@ -145,24 +145,6 @@ export class VexflowService {
           this.globalsService.ties.push(this.create_new_tie(this.globalsService.notes[this.globalsService.notes.length - 1][notesInLastArray - 2], this.globalsService.notes[this.globalsService.notes.length - 1][notesInLastArray - 1]));
         }
       }
-    }
-  }
-
-  public change_scale(newScale: any) {
-    newScale = String(newScale);
-
-    if (this.globalsService.sharpScalesNames.indexOf(newScale) > -1) {
-      this.globalsService.scaleType = "sharps";
-      this.globalsService.currentKeySignature = newScale;
-      this.globalsService.currentScale = this.globalsService.sharpScales[this.globalsService.sharpScalesNames.indexOf(newScale)];
-
-    } else if (this.globalsService.flatScalesNames.indexOf(newScale) > -1) {
-      this.globalsService.scaleType = "flats";
-      this.globalsService.currentKeySignature = newScale;
-      this.globalsService.currentScale = this.globalsService.flatScales[this.globalsService.flatScalesNames.indexOf(newScale)];
-
-    } else {
-      console.log("Entered scale value is invalid.")
     }
   }
 

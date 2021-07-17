@@ -17,13 +17,13 @@ export class MIDIService {
   // ----------------------------------------------------------------------------------
   // Web Midi API
   // ----------------------------------------------------------------------------------
-  public midiAccessEntries: any[] = [];
+  midiAccessEntries: any[] = [];
 
-  public getMidiAccessEntries() {
+  getMidiAccessEntries() {
     return this.midiAccessEntries;
   }
 
-  public connect() {
+  connect() {
     window.navigator.requestMIDIAccess()
     .then((midiAccess) => {
         console.log("MIDI Ready!");
@@ -137,7 +137,7 @@ export class MIDIService {
   }
 
 
-  public setupStaves() {
+  setupStaves() {
     let VF = Vex.Flow;
     let vexDiv = document.getElementById("vex") as HTMLInputElement;
     this.globalsService.renderer = new VF.Renderer(vexDiv, VF.Renderer.Backends.SVG);
@@ -152,7 +152,7 @@ export class MIDIService {
     stave.setContext(context).draw();
   }
 
-  public setBaseWidth(width: number) {
+  setBaseWidth(width: number) {
     this.globalsService.baseWidth = width;
     this.globalsService.stavesPerRow = Math.floor(this.globalsService.baseWidth / this.globalsService.staveWidth);
   }

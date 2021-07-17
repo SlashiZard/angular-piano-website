@@ -10,6 +10,8 @@ import { MIDIService } from './services/midi.service';
 import { NoteDisplayComponent } from './components/note-display/note-display.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { FooterComponent } from './components/footer/footer.component';
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    CommonModule
+    CommonModule,
+    NoopAnimationsModule,
+    MatSelectModule
   ],
   providers: [MIDIService],
   bootstrap: [AppComponent]

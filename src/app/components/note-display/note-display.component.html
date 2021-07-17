@@ -1,3 +1,15 @@
+<mat-form-field appearance="fill">
+    <mat-label>Choose scale</mat-label>
+    <mat-select (selectionChange)='setScale(selectedScale)' [(value)]="selectedScale">
+        <mat-option *ngFor="let option of this.scaleNames" [value]="option">{{ option }}</mat-option>
+    </mat-select>
+</mat-form-field>
+
+<div class="score-info">
+    <p id="music-scale">Scale: {{ this.selectedScale }}</p>
+    <p id="bpm">BPM: 100</p>
+</div>
+
 <div id="vex"></div>
 <div *ngFor="let entry of midiAccessEntries">
     <p>{{ entry[1].name }}</p>
