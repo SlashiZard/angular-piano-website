@@ -86,6 +86,8 @@ export class GlobalsService {
     this.velocities = Array(128).fill(0);
     this.noteTimestamps = Array(128).fill(0);
     this.currentlyPressing = 0;
+    this.staveX = 10 + this.staveWidth;
+    this.staveY = 40;
   }
 
   setVelocity(index: number, value: number) {
@@ -98,6 +100,7 @@ export class GlobalsService {
     }
   
     this.scaleType = scaleType;
+
     if (this.scaleType == "sharps") {
       this.currentKeySignature = this.sharpScalesNames[scaleIndex];
       this.currentScale = this.sharpScales[scaleIndex];

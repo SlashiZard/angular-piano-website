@@ -12,6 +12,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatSelectModule } from '@angular/material/select';
+import { MatRadioModule } from '@angular/material/radio';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,9 @@ import { MatSelectModule } from '@angular/material/select';
     NgbModule,
     CommonModule,
     NoopAnimationsModule,
-    MatSelectModule
+    MatSelectModule,
+    MatRadioModule,
+    FormsModule
   ],
   providers: [MIDIService],
   bootstrap: [AppComponent]

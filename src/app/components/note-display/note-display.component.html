@@ -1,9 +1,25 @@
-<mat-form-field appearance="fill">
-    <mat-label>Choose scale</mat-label>
-    <mat-select (selectionChange)='setScale(selectedScale)' [(value)]="selectedScale">
-        <mat-option *ngFor="let option of this.scaleNames" [value]="option">{{ option }}</mat-option>
-    </mat-select>
-</mat-form-field>
+<div>
+    <label id="scale-type-label">Choose scale type:</label>
+    <mat-radio-group
+    aria-labelledby="scale-type-label"
+    class="example-radio-group"
+    [(ngModel)]="selectedScaleType"
+    (change)='setScaleType(selectedScaleType)'>
+    <mat-radio-button class="example-radio-button" *ngFor="let scaleTypeEntry of scaleTypes" [value]="scaleTypeEntry">
+        {{ scaleTypeEntry }}
+    </mat-radio-button>
+    </mat-radio-group>
+</div>
+
+<div>
+    <mat-form-field appearance="fill">
+        <mat-label>Choose scale</mat-label>
+        <mat-select (selectionChange)='setScale(selectedScale)' [(value)]="selectedScale">
+            <mat-option *ngFor="let option of this.scaleNames" [value]="option">{{ option }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+
 
 <div class="score-info">
     <p id="bpm">BPM: 100</p>

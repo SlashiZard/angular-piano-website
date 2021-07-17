@@ -11,19 +11,25 @@ import { VexflowService } from 'src/app/services/vexflow.service';
 export class NoteDisplayComponent implements OnInit, OnDestroy {
   midiAccessEntries: any[] = [];
   scaleNames: any[] = [];
+  scaleTypes: string[] = ["sharps", "flats"];
   selectedScale = 'C';
+  selectedScaleType = 'sharps';
 
   constructor(private midiService: MIDIService,
               private globalsService: GlobalsService,
               private vexflowService: VexflowService,
               private changeDetectorRef: ChangeDetectorRef) { }
 
-  ngOnInit(): void {
+  updateScaleNames(): void {
     if (this.globalsService.scaleType == "sharps") {
       this.scaleNames = this.globalsService.sharpScalesNames;
     } else {
       this.scaleNames = this.globalsService.flatScalesNames;
     }
+  }
+
+  ngOnInit(): void {
+    this.updateScaleNames();
   }
 
   ngAfterViewInit(): void {
@@ -40,13 +46,21 @@ export class NoteDisplayComponent implements OnInit, OnDestroy {
 
   }
 
+  setScaleType(scaleType: string): void {
+    console.log("new scale type is " + scaleType);
+    this.globalsService.reset();
+    this.globalsService.setScale(scaleType, 0);
+    this.updateScaleNames();
+    this.midiService.setupStaves();
+  }
+
   setScale(keySignature: string): void {
     console.log("new keySignature is " + keySignature);
-    let scaleType = "sharps";
-    let scaleIndex = this.globalsService.sharpScalesNames.indexOf(keySignature);
+  
+    let scaleIndex = this.scaleNames.indexOf(keySignature);
 
     this.globalsService.reset();
-    this.globalsService.setScale(scaleType, scaleIndex);
+    this.globalsService.setScale(this.selectedScaleType, scaleIndex);
     this.midiService.setupStaves();
     // this.vexflowService.draw_notes();
   }

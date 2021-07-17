@@ -1,0 +1,13 @@
+.example-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+}
+
+.example-radio-button {
+    margin-bottom: 5px;
+}
+
+#scale-type-label {
+    margin: 0;
+}
