@@ -18,34 +18,65 @@ export class MIDIService {
   // Web Midi API
   // ----------------------------------------------------------------------------------
   midiAccessEntries: any[] = [];
+  currentMidiDevice: any;
 
   getMidiAccessEntries() {
     return this.midiAccessEntries;
   }
 
-  connect() {
+  connect_first_device() {
     window.navigator.requestMIDIAccess()
     .then((midiAccess) => {
-        console.log("MIDI Ready!");
-        this.midiAccessEntries = [];
+      console.log("MIDI Ready!");
 
-        for (let entry of midiAccess.inputs) {
-          this.midiAccessEntries.push(entry);
-          console.log(entry);
-        }
+      /* Remove onmidimessage event listener. */
+      if (this.currentMidiDevice) {
+        this.currentMidiDevice.onmidimessage = null;
+      }
 
-        if (this.midiAccessEntries.length >= 1) {
-          this.midiAccessEntries[0][1].onmidimessage = this.getMIDIMessage.bind(this);
-        }
+      this.midiAccessEntries = [];
 
-        // for (let entry of midiAccess.inputs) {
-        //     console.log("MIDI input device: " + entry[1].id)
-        //     entry[1].onmidimessage = this.getMIDIMessage.bind(this);
-        // }
+      for (let entry of midiAccess.inputs) {
+        this.midiAccessEntries.push(entry);
+        console.log(entry);
+      }
+
+      if (this.midiAccessEntries.length >= 1) {
+        this.currentMidiDevice = this.midiAccessEntries[0][1];
+        this.currentMidiDevice.onmidimessage = this.getMIDIMessage.bind(this);
+      }
+
+      // for (let entry of midiAccess.inputs) {
+      //   console.log("MIDI input device: " + entry[1].id)
+      //   entry[1].onmidimessage = this.getMIDIMessage.bind(this);
+      // }
     })
     .catch((error) => {
-        console.log("Error accessing MIDI devices: " + error);
+      console.log("Error accessing MIDI devices: " + error);
     });
+  }
+
+  refresh_devices() {
+    window.navigator.requestMIDIAccess()
+    .then((midiAccess) => {
+      console.log("Refreshing MIDI input devices");
+
+      this.midiAccessEntries = [];
+
+      for (let entry of midiAccess.inputs) {
+        this.midiAccessEntries.push(entry);
+        console.log(entry);
+      }
+    })
+    .catch((error) => {
+      console.log("Error accessing MIDI devices: " + error);
+    });
+  }
+
+  connect_to_device(device_index: number) {
+    this.currentMidiDevice.onmidimessage = null;
+    this.currentMidiDevice = this.midiAccessEntries[device_index];
+    this.currentMidiDevice.onmidimessage = this.getMIDIMessage.bind(this);
   }
 
   private getMIDIMessage(message: any) {

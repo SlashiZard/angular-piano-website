@@ -1,4 +1,15 @@
 <div>
+    <mat-form-field appearance="fill">
+        <mat-label>Choose MIDI input device</mat-label>
+        <mat-select (selectionChange)='connectToDevice(selectedDeviceIndex)' [(value)]="selectedDeviceIndex">
+            <mat-option *ngFor="let entry of this.midiAccessEntries; let i = index" [value]="i">{{ entry[1].name }}</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <button class="btn btn-primary" (click)="onRefreshClick()">Refresh MIDI input devices</button>
+</div>
+
+<div>
     <label id="scale-type-label">Choose scale type:</label>
     <mat-radio-group
     aria-labelledby="scale-type-label"

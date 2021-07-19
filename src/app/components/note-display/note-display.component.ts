@@ -8,16 +8,16 @@ import { VexflowService } from 'src/app/services/vexflow.service';
   templateUrl: './note-display.component.html',
   styleUrls: ['./note-display.component.css']
 })
-export class NoteDisplayComponent implements OnInit, OnDestroy {
+export class NoteDisplayComponent implements OnInit {
   midiAccessEntries: any[] = [];
   scaleNames: any[] = [];
   scaleTypes: string[];
   selectedScale = 'C';
   selectedScaleType = 'sharps';
+  selectedDeviceIndex = 0;
 
   constructor(private midiService: MIDIService,
               private globalsService: GlobalsService,
-              private vexflowService: VexflowService,
               private changeDetectorRef: ChangeDetectorRef)
   {
     this.scaleTypes = this.globalsService.scaleTypes;
@@ -37,16 +37,12 @@ export class NoteDisplayComponent implements OnInit, OnDestroy {
 
   ngAfterViewInit(): void {
     let width = document.querySelector<HTMLElement>(".base")!.offsetWidth;
-    this.midiService.connect();
+    this.midiService.connect_first_device();
     this.midiAccessEntries = this.midiService.getMidiAccessEntries();
     this.midiService.setBaseWidth(width);
     this.midiService.setupStaves();
     this.changeDetectorRef.detectChanges();
-    console.log(this.midiAccessEntries);
-  }
-
-  ngOnDestroy(): void {
-
+    console.log("midi", this.midiAccessEntries);
   }
 
   setScaleType(scaleType: string): void {
@@ -65,6 +61,15 @@ export class NoteDisplayComponent implements OnInit, OnDestroy {
     this.globalsService.reset();
     this.globalsService.setScale(this.selectedScaleType, scaleIndex);
     this.midiService.setupStaves();
-    // this.vexflowService.draw_notes();
+  }
+
+  onRefreshClick(): void {
+    this.midiService.refresh_devices();
+    this.midiAccessEntries = this.midiService.midiAccessEntries;
+  }
+
+  connectToDevice(device_index: number): void {
+    console.log("device index is " + device_index);
+    this.midiService.connect_to_device(device_index);
   }
 }

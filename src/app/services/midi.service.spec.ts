@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { MIDIService } from './midi.service';
 
-describe('MIDIServiceService', () => {
+describe('MIDIService', () => {
   let service: MIDIService;
 
   beforeEach(() => {
