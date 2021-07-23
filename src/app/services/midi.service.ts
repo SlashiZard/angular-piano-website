@@ -95,10 +95,10 @@ export class MIDIService {
           // this.globalsService.velocities[note] = velocity;
           this.globalsService.setVelocity(note, velocity)
           // console.log("Timestamp is", timestamp);
-          this.globalsService.noteTimestamps[note] = timestamp;
+          this.globalsService.notePressedTimestamps[note] = timestamp;
+          this.globalsService.currentlyPressing.push(note);
         }
 
-        this.globalsService.currentlyPressing++;
         break;
       case 128:
         console.log("NoteOff", note);
@@ -111,58 +111,72 @@ export class MIDIService {
           console.log("Velocity is", velocity);
         }
 
-        let note_duration = (timestamp - this.globalsService.noteTimestamps[note]) / (60000 / this.globalsService.bpm);
-        note_duration = this.midiConversionService.round_durations(1 / note_duration * 4);
-        let addedQLs = this.midiConversionService.duration_to_QLs(note_duration);
+        // if (this.globalsService.lastTimestamp )
+        console.log(this.globalsService.lastTimestamp);
+        console.log(timestamp);
 
-        /* measureDuration is 2.0 if two quarter notes have been played in the measure. */
-        this.globalsService.measureDuration = this.globalsService.scoreDuration % this.globalsService.beatsInMeasure;
-        let measureDurationLeft = 4 - this.globalsService.measureDuration;
+        if (this.globalsService.lastTimestamp != 0 && timestamp - this.globalsService.lastTimestamp > 250) {
+          let note_duration = (timestamp - this.globalsService.notePressedTimestamps[note]) / (60000 / this.globalsService.bpm);
+          note_duration = this.midiConversionService.round_durations(1 / note_duration * 4);
+          let addedQLs = this.midiConversionService.duration_to_QLs(note_duration);
 
-        let newNotes = this.vexflowService.list_new_notes(addedQLs, measureDurationLeft);
-        this.globalsService.currentlyPressing--;
+          /* measureDuration is 2.0 if two quarter notes have been played in the measure. */
+          this.globalsService.measureDuration = this.globalsService.scoreDuration % this.globalsService.beatsInMeasure;
+          let measureDurationLeft = 4 - this.globalsService.measureDuration;
 
-        /* Handle the accidentals. */
-        let accidental: any = "";
-        let foundAccidental = this.midiConversionService.handle_accidental(note);
+          let newNotes = this.vexflowService.list_new_notes(addedQLs, measureDurationLeft);
 
-        if (foundAccidental != "") {
-          let fixResult = this.midiConversionService.fix_accidental(note, foundAccidental);
-          note = fixResult[0];
-          accidental = fixResult[1];
-        }
+          /* Handle the accidentals. */
+          let accidental: any = "";
+          let foundAccidental = this.midiConversionService.handle_accidental(note);
 
-        let noteCount = 0;
-
-        for (let newNote of newNotes) {
-          if (typeof newNote === "number") {
-            noteCount++;
-
-            /* Note is of full duration. */
-            if (this.mathService.power_of_2(newNote)) {
-              this.globalsService.notes[this.globalsService.notes.length - 1].push(new Vex.Flow.StaveNote({ keys: [this.midiConversionService.getKeysOfNote(note)], duration: String(newNote) }));
-            /* A dot is needed. */
-            } else {
-              newNote = String(this.globalsService.DURATIONS[this.globalsService.DURATIONS.indexOf(newNote) + 1]);
-              this.globalsService.notes[this.globalsService.notes.length - 1].push(new Vex.Flow.StaveNote({ keys: [this.midiConversionService.getKeysOfNote(note)], duration: String(newNote) }).addDot(0));
-            }
-
-            /* Add the accidentals. */
-            if (accidental != "") {
-              let notesInLastArray = this.globalsService.notes[this.globalsService.notes.length - 1].length;
-              let targetNote = this.globalsService.notes[this.globalsService.notes.length - 1][notesInLastArray - 1];
-              targetNote.addAccidental(0, new Vex.Flow.Accidental(accidental));
-            }
-
-            this.vexflowService.handle_ties(noteCount);
-          /* If newNote is string "new". */
-          } else {
-            this.vexflowService.create_new_stave();
-            this.globalsService.notes.push([]);
+          if (foundAccidental != "") {
+            let fixResult = this.midiConversionService.fix_accidental(note, foundAccidental);
+            note = fixResult[0];
+            accidental = fixResult[1];
           }
+
+          let noteCount = 0;
+
+          for (let newNote of newNotes) {
+            if (typeof newNote === "number") {
+              noteCount++;
+
+              /* Note is of full duration. */
+              if (this.mathService.power_of_2(newNote)) {
+                let stave_index = this.globalsService.notes.length - 1;
+                this.globalsService.notes[stave_index].push(new Vex.Flow.StaveNote({ keys: this.midiConversionService.getKeysOfLastReleasedNotes(), duration: String(newNote) }));
+              /* A dot is needed. */
+              } else {
+                newNote = String(this.globalsService.DURATIONS[this.globalsService.DURATIONS.indexOf(newNote) + 1]);
+                this.globalsService.notes[this.globalsService.notes.length - 1].push(new Vex.Flow.StaveNote({ keys: this.midiConversionService.getKeysOfLastReleasedNotes(), duration: String(newNote) }).addDot(0));
+              }
+
+              /* Add the accidentals. */
+              if (accidental != "") {
+                let notesInLastArray = this.globalsService.notes[this.globalsService.notes.length - 1].length;
+                let targetNote = this.globalsService.notes[this.globalsService.notes.length - 1][notesInLastArray - 1];
+                targetNote.addAccidental(0, new Vex.Flow.Accidental(accidental));
+              }
+
+              this.vexflowService.handle_ties(noteCount);
+            /* If newNote is string "new". */
+            } else {
+              this.vexflowService.create_new_stave();
+              this.globalsService.notes.push([]);
+            }
+          }
+
+          // console.log(this.midiConversionService.getKeysOfLastReleasedNotes());
+          this.globalsService.lastNotes = [];
+          this.vexflowService.draw_notes();
         }
 
-        this.vexflowService.draw_notes();
+        this.globalsService.lastNotes.push(note);
+        this.globalsService.lastTimestamp = timestamp;
+        this.globalsService.noteReleasedTimestamps[note] = timestamp;
+        this.globalsService.currentlyPressing.splice(this.globalsService.currentlyPressing.indexOf(note), 1);
+
         break;
     }
   }

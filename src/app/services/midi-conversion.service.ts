@@ -118,6 +118,14 @@ export class MidiConversionService {
   public getKeysOfNote(note: number) {
     return String(this.number_to_note(note) + "/" + this.number_to_octave(note));
   }
+
+  public getKeysOfLastReleasedNotes() {
+    let keys: string[] = [];
+    for (let lastNote of this.globalsService.lastNotes) {
+      keys.push(this.getKeysOfNote(lastNote));
+    }
+    return keys;
+  }
   
   constructor(private globalsService: GlobalsService) { }
 }

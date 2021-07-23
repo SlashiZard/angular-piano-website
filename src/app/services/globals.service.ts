@@ -10,7 +10,7 @@ export class GlobalsService {
   DURATIONS = [1, 1.5, 2, 3, 4, 6, 8, 16, 32];
   DURATIONS_IN_QLS = [4, 3, 2, 1.5, 1, 0.75, 0.5, 0.25, 0.125];
 
-  /* Note duration should be dependant on BPM, allow user to enter a BPM value with a Flask form. */
+  /* Note duration should be dependant on BPM, allow user to enter a BPM value with a form. */
   /* Put in Score.js */
   bpm = 100;
   beatsInMeasure = 4;
@@ -39,8 +39,11 @@ export class GlobalsService {
 
   /* Keep track of pressed notes and their values. Initialize the 128 midi values with 0. */
   velocities = Array(128).fill(0);
-  noteTimestamps = Array(128).fill(0);
-  currentlyPressing = 0;
+  notePressedTimestamps = Array(128).fill(0);
+  noteReleasedTimestamps = Array(128).fill(0);
+  currentlyPressing: any = [];
+  lastNotes: any[] = [];
+  lastTimestamp = 0;
 
   // ----------------------------------------------------------------------------------
   // Scale Variables
@@ -85,8 +88,11 @@ export class GlobalsService {
     this.notes = [[]];
     this.ties = [];
     this.velocities = Array(128).fill(0);
-    this.noteTimestamps = Array(128).fill(0);
-    this.currentlyPressing = 0;
+    this.notePressedTimestamps = Array(128).fill(0);
+    this.noteReleasedTimestamps = Array(128).fill(0);
+    this.currentlyPressing = [];
+    this.lastNotes = [];
+    this.lastTimestamp = 0;
     this.staveX = 10 + this.staveWidth;
     this.staveY = 40;
   }
@@ -99,7 +105,7 @@ export class GlobalsService {
     if ((scaleType != "sharps" && scaleType != "flats") || scaleIndex < 0 || scaleIndex > this.sharpScales.length) {
       return;
     }
-  
+
     this.scaleType = scaleType;
 
     if (this.scaleType == "sharps") {
@@ -113,9 +119,13 @@ export class GlobalsService {
     }
   }
 
+  appendNote(stave_index: number, note_index: number, new_note: string) {
+    let old_note = this.notes[stave_index][note_index];
+    let curr_duration = old_note.duration;
+    let curr_keys = old_note.keys;
+    curr_keys.push(new_note);
+    this.notes[stave_index].splice(note_index, 1, new Vex.Flow.StaveNote({ keys: curr_keys, duration: curr_duration }));
+  }
+
   constructor() { }
-
-  // const entriesObservable = new Observable((observer) => {
-
-  // });
 }
