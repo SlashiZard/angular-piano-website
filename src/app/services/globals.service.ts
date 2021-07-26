@@ -18,7 +18,7 @@ export class GlobalsService {
   scoreDuration = 0;
   measureDuration = 0;
 
-  staveWidth = 500;
+  staveWidth = 400;
   staveHeight = 200;
 
   staveX = 10 + this.staveWidth;

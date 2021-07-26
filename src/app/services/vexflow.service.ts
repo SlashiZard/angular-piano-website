@@ -94,7 +94,7 @@ export class VexflowService {
     let vexDiv = document.getElementById("vex") as HTMLInputElement;
     vexDiv.innerHTML = "";
     this.globalsService.renderer = new Vex.Flow.Renderer(vexDiv, Vex.Flow.Renderer.Backends.SVG);
-    this.globalsService.renderer.resize(this.globalsService.stavesPerRow * 500, 2000);
+    this.globalsService.renderer.resize(this.globalsService.stavesPerRow * 500, 10000);
     let context = this.globalsService.renderer.getContext();
 
     console.log(this.globalsService.stavesPerRow);

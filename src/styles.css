@@ -1,7 +1,7 @@
 @import "~bootstrap/dist/css/bootstrap.css";
 
 .base {
-    margin: 0% 10%;
+    margin: 0% 100px;
 }
 
 html, body { height: 100%; }

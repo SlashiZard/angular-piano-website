@@ -115,7 +115,7 @@ export class MIDIService {
         console.log(this.globalsService.lastTimestamp);
         console.log(timestamp);
 
-        if (this.globalsService.lastTimestamp != 0 && timestamp - this.globalsService.lastTimestamp > 250) {
+        if (this.globalsService.lastTimestamp != 0 && timestamp - this.globalsService.lastTimestamp > 125) {
           let note_duration = (timestamp - this.globalsService.notePressedTimestamps[note]) / (60000 / this.globalsService.bpm);
           note_duration = this.midiConversionService.round_durations(1 / note_duration * 4);
           let addedQLs = this.midiConversionService.duration_to_QLs(note_duration);
@@ -181,7 +181,7 @@ export class MIDIService {
     let vexDiv = document.getElementById("vex") as HTMLInputElement;
     vexDiv.innerHTML = "";
     this.globalsService.renderer = new VF.Renderer(vexDiv, VF.Renderer.Backends.SVG);
-    this.globalsService.renderer.resize(this.globalsService.stavesPerRow * 500, 2000);
+    this.globalsService.renderer.resize(this.globalsService.stavesPerRow * 500, 10000);
     let context = this.globalsService.renderer.getContext();
 
     /* Create the first stave and draw it. */
