@@ -29,7 +29,7 @@ export class MIDIService {
     .then((midiAccess) => {
       console.log("MIDI Ready!");
 
-      /* Remove onmidimessage event listener. */
+      /* Remove onmidimessage event listener on the current MIDI device. */
       if (this.currentMidiDevice) {
         this.currentMidiDevice.onmidimessage = null;
       }
@@ -127,14 +127,7 @@ export class MIDIService {
           let newNotes = this.vexflowService.list_new_notes(addedQLs, measureDurationLeft);
 
           /* Handle the accidentals. */
-          let accidental: any = "";
-          let foundAccidental = this.midiConversionService.handle_accidental(note);
-
-          if (foundAccidental != "") {
-            let fixResult = this.midiConversionService.fix_accidental(note, foundAccidental);
-            note = fixResult[0];
-            accidental = fixResult[1];
-          }
+          let accidentals = this.midiConversionService.handle_all_accidentals();
 
           let noteCount = 0;
 
@@ -151,12 +144,14 @@ export class MIDIService {
                 newNote = String(this.globalsService.DURATIONS[this.globalsService.DURATIONS.indexOf(newNote) + 1]);
                 this.globalsService.notes[this.globalsService.notes.length - 1].push(new Vex.Flow.StaveNote({ keys: this.midiConversionService.getKeysOfLastReleasedNotes(), duration: String(newNote) }).addDot(0));
               }
-
+              
               /* Add the accidentals. */
-              if (accidental != "") {
-                let notesInLastArray = this.globalsService.notes[this.globalsService.notes.length - 1].length;
-                let targetNote = this.globalsService.notes[this.globalsService.notes.length - 1][notesInLastArray - 1];
-                targetNote.addAccidental(0, new Vex.Flow.Accidental(accidental));
+              let notesInLastArray = this.globalsService.notes[this.globalsService.notes.length - 1].length;
+              let targetNote = this.globalsService.notes[this.globalsService.notes.length - 1][notesInLastArray - 1];
+              for (let i = 0; i < accidentals.length; ++i) {
+                if (accidentals[i] != "") {
+                  targetNote.addAccidental(i, new Vex.Flow.Accidental(accidentals[i]));
+                }
               }
 
               this.vexflowService.handle_ties(noteCount);
@@ -173,10 +168,10 @@ export class MIDIService {
         }
 
         this.globalsService.lastNotes.push(note);
+        this.globalsService.sortLastNotes();
         this.globalsService.lastTimestamp = timestamp;
         this.globalsService.noteReleasedTimestamps[note] = timestamp;
         this.globalsService.currentlyPressing.splice(this.globalsService.currentlyPressing.indexOf(note), 1);
-
         break;
     }
   }

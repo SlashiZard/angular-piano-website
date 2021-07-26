@@ -18,7 +18,7 @@ export class GlobalsService {
   scoreDuration = 0;
   measureDuration = 0;
 
-  staveWidth = 250;
+  staveWidth = 500;
   staveHeight = 200;
 
   staveX = 10 + this.staveWidth;
@@ -125,6 +125,15 @@ export class GlobalsService {
     let curr_keys = old_note.keys;
     curr_keys.push(new_note);
     this.notes[stave_index].splice(note_index, 1, new Vex.Flow.StaveNote({ keys: curr_keys, duration: curr_duration }));
+  }
+
+  sortLastNotes() {
+    this.lastNotes.sort();
+    let tempSet = new Set(this.lastNotes);
+    this.lastNotes = [];
+    for (let note of tempSet) {
+      this.lastNotes.push(note);
+    }
   }
 
   constructor() { }

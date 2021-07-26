@@ -81,6 +81,24 @@ export class MidiConversionService {
     return "";
   }
 
+  public handle_all_accidentals() {
+    let accidentals: any[] = [];
+    for (let i = 0; i < this.globalsService.lastNotes.length; ++i) {
+      let note = this.globalsService.lastNotes[i];
+      let foundAccidental = this.handle_accidental(note);
+
+      if (foundAccidental != "") {
+        let fixResult = this.fix_accidental(note, foundAccidental);
+        this.globalsService.lastNotes[i] = fixResult[0];
+        accidentals.push(fixResult[1]);
+      } else {
+        accidentals.push("");
+      }
+    }
+  
+    return accidentals;
+  }
+
   public fix_accidental(note: number, accidental: string) {
     switch (accidental) {
       case "n":
